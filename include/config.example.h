@@ -3,17 +3,25 @@
 // =====================================================
 // ESP32-S3 JJY NTP Transmitter configuration example
 // 請複製本檔為 include/config.h，然後填入 Wi-Fi。
+// 之後也可以用 ESP32 內建 Web UI 修改設定。
 // =====================================================
 
-// ---------- Wi-Fi ----------
+// ---------- Wi-Fi STA defaults ----------
+// 第一次可先填家裡 2.4GHz Wi-Fi。若留預設值，ESP32 仍會開 AP 讓你進 UI。
 #define WIFI_SSID "your-wifi-ssid"
 #define WIFI_PASSWORD "your-wifi-password"
+
+// ---------- Web UI / AP ----------
+#define UI_WEB_PORT 80
+#define UI_AP_ALWAYS_ON 1
+#define UI_AP_SSID "JJY-SETUP"
+#define UI_AP_PASSWORD "12345678"
 
 // ---------- Time / NTP ----------
 // 台灣時間 UTC+8。POSIX TZ 寫法方向相反，所以 UTC+8 寫成 CST-8。
 #define TIME_ZONE_POSIX "CST-8"
 
-// 日本時間 UTC+9，如要讓鐘顯示日本時間，可改成：
+// 日本時間 UTC+9，如要讓鐘顯示日本時間，可在 Web UI 改成 JST-9。
 // #define TIME_ZONE_POSIX "JST-9"
 
 #define NTP_SERVER_1 "time.stdinet.net.tw"
@@ -24,8 +32,6 @@
 #define CARRIER_PIN 4
 #define CARRIER_FREQUENCY_HZ 60000
 #define CARRIER_DUTY_PERCENT 50
-
-// LEDC 設定。Arduino-ESP32 core 2.x 會用 channel；core 3.x 會自動改用 pin API。
 #define LEDC_CHANNEL 0
 #define LEDC_RESOLUTION_BITS 8
 
@@ -33,10 +39,13 @@
 #define LED_PIN -1
 #define LED_ACTIVE_LOW 0
 
-// ---------- JJY output polarity ----------
-// 0：標準模式，active window 期間輸出 60kHz 載波。
-// 1：反相模式，active window 期間關閉載波。
-// 如果 SEIKO RE572S 收不到，請先嘗試 0，再嘗試 1。
+// ---------- JJY output defaults ----------
+// 1：啟用輸出。0：開機先不輸出，可從 Web UI 打開。
+#define DEFAULT_OUTPUT_ENABLED 1
+
+// 0：標準 JJY OOK：active window 期間關閉 60kHz 載波，剩餘時間開啟。
+// 1：反相：active window 期間開啟載波，剩餘時間關閉。
+// 如果 SEIKO RE572S 收不到，可從 Web UI 切換測試。
 #define JJY_OUTPUT_INVERTED 0
 
 // ---------- Test modes ----------
